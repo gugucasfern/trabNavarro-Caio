@@ -58,6 +58,45 @@ router.route('/produtos')
                 });
             });
         })    
+        
+    router.get('/produtos/:id', function (req, res, next) {
+        Produto.find({ _id: req.params.id }).lean().exec(function (e, docs) {
+            res.json(docs);
+            res.end();
+        });
+    });
+
+
+    router.put('/produtos/:id', function (req, res, next) {
+        Produto.findOneAndUpdate
+
+    });
+
+    router.delete('/produtos/:id', function (req, res, next) {
+        Produto.find({ _id: req.params.id }).remove(function (err) {
+            if (err) {
+                res.status(500).json({ error: err.message });
+                res.end();
+                return;
+            }
+            res.json({success: true});
+            res.end();
+        });
+    });
+
+    router.put('/produtos/:id', function (req, res, next) {
+        Produto.findOneAndUpdate({ _id: req.params.id }, req.body, { upsert: true }, function (err, doc) {
+            if (err) {
+                res.status(500).json({ error: err.message });
+                res.end();
+                return;
+            }
+            res.json(req.body);
+            res.end();
+        });
+    });
+    
+
 
 //Vincular a aplicacao (app) com o motor de rotas
 app.use('/api', router);
